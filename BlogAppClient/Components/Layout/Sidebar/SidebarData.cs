@@ -5,9 +5,13 @@ public class SidebarData
 
     public static List<MenuItem> GetStandardMenuItems() => new()
     {
-        new MenuItem(href:"/home", title: "Home", icon:"ri-home-3-fill"),
-        new MenuItem(href:"/login", title: "Login", icon:"ri-add-box-fill"),
-        //new MenuItem(href:"/weather", title: "Weather", icon:"ri-bar-chart-horizontal-line"),
+        new MenuItem(href:"/home", title: "Anasayfa", icon:"ri-home-3-fill"),
+        new MenuItem(href:"/login", title: "Giriş Yap", icon:"ri-login-box-fill"),
+        new MenuItem(href:"/category", title: "Kategoriler", icon:"ri-grid-fill"),
+        new MenuItem(href:"/article", title: "Makaleler", icon:"ri-article-fill"),
+        new MenuItem(href:"/user", title: "Kullanıcılar", icon:"ri-user-fill"),
+        new MenuItem(href:"/role-management", title: "Rol Yönetimi", icon:"ri-shield-user-fill"),
+        new MenuItem(href:"/logout", title: "Çıkış Yap", icon:"ri-logout-circle-fill"),
     };
 
     public static List<MenuItem> GetGeneralMenuItems() => new()
