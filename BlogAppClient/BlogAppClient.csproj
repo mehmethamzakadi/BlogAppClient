@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Components\Layout\Sidebar\MenuItemComponent.razor" />
-    <None Include="Components\Layout\Sidebar\SidebarComponent.razor" />
-    <None Include="Components\Layout\Sidebar\SidebarFooterComponent.razor" />
+    <None Include="Components\Layout\AdminLayout\Sidebar\MenuItemComponent.razor" />
+    <None Include="Components\Layout\AdminLayout\Sidebar\SidebarComponent.razor" />
+    <None Include="Components\Layout\AdminLayout\Sidebar\SidebarFooterComponent.razor" />
   </ItemGroup>
 
   <ItemGroup>
