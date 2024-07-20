@@ -1,4 +1,6 @@
-﻿@if (MenuItem != null)
+﻿@rendermode @(new InteractiveServerRenderMode(prerender:false));
+
+@if (MenuItem != null)
 {
     <li class="menu-item @(MenuItem.HasChildMenuItems ? "sub-menu" : "") @(MenuItem.IsOpened ? "open" : "")">
         <NavLink @onclick="MenuItemClick" style="cursor:pointer">

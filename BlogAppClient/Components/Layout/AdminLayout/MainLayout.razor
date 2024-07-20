@@ -6,11 +6,10 @@
 
 <div class="layout has-sidebar fixed-sidebar fixed-header">
 
-    <SidebarComponent @ref="sideBarComponent"/>
+    <SidebarComponent @ref="sideBarComponent" />
 
     <div @onclick="@(e => sideBarComponent?.MouseClickedInOverlay())" id="overlay" class="overlay"></div>
     <div class="layout">
-
         <main class="content" @onclick="@(e => sideBarComponent?.MouseClickedInContent())">
             <div>
                 <a @onclick="(e => sideBarComponent?.BtnToggleClicked())" id="btn-toggle" href="#" class="sidebar-toggler break-point-sm">

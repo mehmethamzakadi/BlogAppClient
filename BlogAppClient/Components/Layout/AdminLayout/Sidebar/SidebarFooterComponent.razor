@@ -1,4 +1,6 @@
-﻿<div class="sidebar-footer" style="display:@(IsCollapsed? "none": "block")">
+﻿@rendermode @(new InteractiveServerRenderMode(prerender:false));
+
+<div class="sidebar-footer" style="display:@(IsCollapsed? "none": "block")">
     <div class="footer-box">
         <div>
             <img class="react-logo"

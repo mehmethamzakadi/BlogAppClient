@@ -1,4 +1,6 @@
 ﻿@inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@rendermode @(new InteractiveServerRenderMode(prerender:false));
 
 
 <aside id="sidebar" class="sidebar break-point-sm has-bg-image @(_isCollapsed ? "collapsed" : "") @(_isToggled ? "toggled" : "")">
@@ -20,14 +22,33 @@
 
                     @foreach (var menuItem in standardItems)
                     {
-                        <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                        if (menuItem.Title == "Anasayfa")
+                        {
+                            <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                        }
+                        else if (menuItem.Title == "Giriş Yap" && !isAuthenticated)
+                        {
+                            <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                        }
+                        else if (menuItem.Title == "Çıkış Yap")
+                        {
+                            <AuthorizeView>
+                                <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                            </AuthorizeView>
+                        }
+                        else
+                        {
+                            <AuthorizeView>
+                                <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                            </AuthorizeView>
+                        }
                     }
-                    
-                   @*  <li class="menu-header"><span> GENERAL </span></li>
+
+                    @*  <li class="menu-header"><span> GENERAL </span></li>
 
                     @foreach (var menuItem in generalMenuItems)
                     {
-                        <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                    <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
                     } *@
                 </ul>
             </nav>
@@ -42,9 +63,18 @@
 @code {
     private bool _isCollapsed { get; set; } = false;
     private bool _isToggled { get; set; } = false;
+    private bool isAuthenticated { get; set; } = false;
+
 
     List<MenuItem> standardItems = SidebarData.GetStandardMenuItems();
     List<MenuItem> generalMenuItems = SidebarData.GetGeneralMenuItems();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        isAuthenticated = user.Identity.IsAuthenticated;
+    }
 
     public void BtnToggleClicked()
     {
