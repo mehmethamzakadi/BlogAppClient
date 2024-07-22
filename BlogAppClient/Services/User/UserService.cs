@@ -36,8 +36,14 @@ public class UserService(HttpClient httpClient, ILocalStorageService localStorag
         var apiResponse = await response.Content.ReadAsStringAsync();
 
         var loginResponse = AuthGenerics.DeserializeJsonString<Result<LoginResponse>>(apiResponse);
-
-        await localStorageService.SetItemAsStringAsync("auth", loginResponse.Data.Token);
+        if (loginResponse.Success)
+        {
+            await localStorageService.SetItemAsStringAsync("token", loginResponse.Data.Token);
+        }
+        else
+        {
+            await localStorageService.RemoveItemAsync("token");
+        }
 
         return loginResponse;
     }

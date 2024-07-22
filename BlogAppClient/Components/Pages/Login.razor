@@ -1,10 +1,18 @@
 ﻿@page "/login"
+@using BlogAppClient.Models.User
+@using BlogAppClient.Services.User
+@using BlogAppClient.States.Authentication
+@inject NavigationManager _navigationManager
+@inject IUserService userService
+@inject CustomAuthenticationStateProvider customAuthenticationStateProvider
+
+@rendermode @(new InteractiveServerRenderMode(prerender:false));
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <RadzenTemplateForm Data=@("LoginWithDefaultValues")>
         <RadzenLogin AllowRegister="true" AllowResetPassword="true" Username=@userName Password=@password
                      AllowRememberMe="true" RememberMe="@rememberMe"
-                     Login=@(args => OnLogin(args, "Login with default values"))
+                     Login=@(async args => await OnLogin(args, "Login with default values"))
                      ResetPassword=@(args => OnResetPassword(args, "Login with default values"))
                      Register=@(args => OnRegister("Login with default values")) />
     </RadzenTemplateForm>
@@ -15,9 +23,16 @@
     string password = string.Empty;
     bool rememberMe = true;
 
-    void OnLogin(LoginArgs args, string name)
+
+    async Task OnLogin(LoginArgs args, string name)
     {
         Console.WriteLine($"{name} -> Username: {args.Username}, password: {args.Password}, remember me: {args.RememberMe}");
+        var result = await userService.LoginUser(new LoginRequest { Email = args.Username, Password = args.Password });
+        if (result.Success)
+        {
+            await customAuthenticationStateProvider.UpdateAuthenticationState(result.Data.Token);
+            _navigationManager.NavigateTo("/home");
+        }
     }
 
     void OnRegister(string name)

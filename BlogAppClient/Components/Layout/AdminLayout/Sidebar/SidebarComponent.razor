@@ -1,7 +1,7 @@
-﻿@inject NavigationManager _navigationManager
+﻿@page "/sidebar"
+@inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@rendermode @(new InteractiveServerRenderMode(prerender:false));
-
+@rendermode @(new InteractiveServerRenderMode(prerender:false))
 
 <aside id="sidebar" class="sidebar break-point-sm has-bg-image @(_isCollapsed ? "collapsed" : "") @(_isToggled ? "toggled" : "")">
     <a @onclick="BtnCollapseClicked" id="btn-collapse" class="sidebar-collapser"><i class="ri-arrow-left-s-line"></i></a>
@@ -26,45 +26,33 @@
                         {
                             <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
                         }
-                        else if (menuItem.Title == "Giriş Yap" && !isAuthenticated)
-                        {
-                            <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
-                        }
-                        else if (menuItem.Title == "Çıkış Yap")
-                        {
-                            <AuthorizeView>
-                                <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
-                            </AuthorizeView>
-                        }
                         else
                         {
                             <AuthorizeView>
-                                <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                                <Authorized>
+                                    @if (menuItem.Title != "Giriş Yap")
+                                    {
+                                        <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                                    }
+                                </Authorized>
+                                <NotAuthorized>
+                                    @if (menuItem.Title == "Giriş Yap")
+                                    {
+                                        <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
+                                    }
+                                </NotAuthorized>
                             </AuthorizeView>
                         }
                     }
-
-                    @*  <li class="menu-header"><span> GENERAL </span></li>
-
-                    @foreach (var menuItem in generalMenuItems)
-                    {
-                    <MenuItemComponent MenuItem="@menuItem" MenuItemClickCallback="MenuItemClick" />
-                    } *@
                 </ul>
             </nav>
         </div>
-
-        @* <SidebarFooterComponent IsCollapsed="@_isCollapsed"/> *@
-
     </div>
 </aside>
-
 
 @code {
     private bool _isCollapsed { get; set; } = false;
     private bool _isToggled { get; set; } = false;
-    private bool isAuthenticated { get; set; } = false;
-
 
     List<MenuItem> standardItems = SidebarData.GetStandardMenuItems();
     List<MenuItem> generalMenuItems = SidebarData.GetGeneralMenuItems();
@@ -73,7 +61,6 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        isAuthenticated = user.Identity.IsAuthenticated;
     }
 
     public void BtnToggleClicked()
@@ -122,5 +109,4 @@
             _navigationManager.NavigateTo(menuItem.Href);
         }
     }
-
 }

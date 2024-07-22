@@ -22,6 +22,7 @@ builder.Services.AddScoped<DialogService>();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<CustomAuthenticationStateProvider>(); // Gerektiðinde doðrudan eriþim için
 builder.Services.AddScoped<IHttpClientService, HttpClientService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
